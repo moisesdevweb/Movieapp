@@ -18,22 +18,17 @@ Aplicación web para explorar películas, guardar favoritos y comentar. Construi
 - **Backend**: Supabase (Auth + Database)
 - **API**: The Movie Database (TMDB)
 
-## 📋 Requisitos Previos
-
-Antes de comenzar, asegúrate de tener instalado:
-
-- [Node.js](https://nodejs.org/) (versión 16 o superior)
-- [npm](https://www.npmjs.com/) o [yarn](https://yarnpkg.com/)
-
 ## 🚀 Instalación
-
+```
 1. Clona el repositorio:
 git clone https://github.com/moisesdevweb/Movieapp.git
 cd frontend
+```
 
 2. Instala las dependencias:
-
+```
 npm install
+```
 
 3. Crea un archivo `.env` en la raíz del proyecto y configura tus variables de entorno:
 ```
@@ -118,23 +113,10 @@ movie-app/
 - [ ] Funcionalidad de favoritos
 - [ ] Panel de edición de perfil
 
-## 🤝 Contribuir
-
-Las contribuciones son bienvenidas. Por favor:
-
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/NuevaCaracteristica`)
-3. Commit tus cambios (`git commit -m 'Agrega nueva característica'`)
-4. Push a la rama (`git push origin feature/NuevaCaracteristica`)
-5. Abre un Pull Request
-
-## 📝 Licencia
-
-Este proyecto está bajo la Licencia MIT.
 
 ## 👤 Autor
 
-Tu Nombre - [@tu_usuario](https://github.com/tu-usuario)
+ [@moisesdevweb](https://github.com/moisesdevweb)
 
 ## 🙏 Agradecimientos
 
