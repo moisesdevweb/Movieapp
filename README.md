@@ -36,12 +36,12 @@ cd frontend
 npm install
 
 3. Crea un archivo `.env` en la raíz del proyecto y configura tus variables de entorno:
-
+```
 VITE_TMDB_API_KEY=tu_api_key_de_tmdb
 VITE_TMDB_ACCESS_TOKEN=tu_token_de_tmdb
 VITE_SUPABASE_URL=tu_url_de_supabase
 VITE_SUPABASE_ANON_KEY=tu_clave_anon_de_supabase                   
-
+```
 4. Inicia el servidor de desarrollo:
 
 5. Abre tu navegador en `http://localhost:5173`
@@ -49,7 +49,7 @@ VITE_SUPABASE_ANON_KEY=tu_clave_anon_de_supabase
 ## 📦 Dependencias Principales
 
 ### Producción
-
+```
 {
 "react": "^18.3.1",
 "react-dom": "^18.3.1",
@@ -57,17 +57,17 @@ VITE_SUPABASE_ANON_KEY=tu_clave_anon_de_supabase
 "@supabase/auth-ui-react": "^0.4.x",
 "@supabase/auth-ui-shared": "^0.1.x"
 }
-
+```
 
 ### Desarrollo
-
+```
 {
 "vite": "^5.x",
 "tailwindcss": "^3.x",
 "postcss": "^8.x",
 "autoprefixer": "^10.x"
 }
-
+```
 
 ## 🔑 Obtener API Keys
 
@@ -84,7 +84,7 @@ VITE_SUPABASE_ANON_KEY=tu_clave_anon_de_supabase
 4. Copia tu Project URL y la clave `anon/public`
 
 ## 📁 Estructura del Proyecto
-
+```
 movie-app/
 ├── src/
 │ ├── components/ # Componentes reutilizables
@@ -105,7 +105,7 @@ movie-app/
 ├── package.json
 ├── tailwind.config.js
 └── vite.config.js
-
+```
 
 ## 🎯 Roadmap
 
