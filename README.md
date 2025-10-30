@@ -40,7 +40,7 @@ npm install
 VITE_TMDB_API_KEY=tu_api_key_de_tmdb
 VITE_TMDB_ACCESS_TOKEN=tu_token_de_tmdb
 VITE_SUPABASE_URL=tu_url_de_supabase
-VITE_SUPABASE_ANON_KEY=tu_clave_anon_de_supabase
+VITE_SUPABASE_ANON_KEY=tu_clave_anon_de_supabase                   
 
 4. Inicia el servidor de desarrollo:
 
