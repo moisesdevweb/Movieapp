@@ -38,7 +38,7 @@ const MediaCard = ({ media, type }) => {
       <div className="p-3">
         <h4 className="text-white font-semibold truncate">{title}</h4>
         <p className={`text-${color}-500 text-sm truncate mb-2`}>
-          como {media.character}
+          como {media.character !== "" ? media.character : "N/A"}
         </p>
         {year && <p className="text-slate-400 text-xs">{year}</p>}
       </div>
