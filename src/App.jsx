@@ -1,3 +1,4 @@
+import Header from './components/Header';
 import { Sidebar } from './components/sidebar';
 
 
@@ -7,6 +8,7 @@ function App() {
       <Sidebar />
       
       <main className="flex-1">
+        <Header />
         {/* Aquí va el contenido principal */}
       </main>
     </div>
