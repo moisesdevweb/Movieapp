@@ -4,7 +4,7 @@ import {
   Home, 
   Heart, 
   TrendingUp, 
-  Calendar, 
+  PartyPopper , 
   Users, 
   MessageSquare, 
   Settings, 
@@ -38,11 +38,11 @@ export const mainMenuItems = [
     path: '/tendencias' 
   },
   { 
-    id: 'proximamente', 
-    icon: Calendar, 
-    label: 'Próximamente', 
+    id: 'actores', 
+    icon: PartyPopper , 
+    label: 'Actores', 
     badge: '',
-    path: '/proximamente' 
+    path: '/trending-persons' 
   },
 ];
 
