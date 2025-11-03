@@ -9,7 +9,8 @@ export const CelebrityCard = ({ actor, index }) => (
         <div className="absolute top-3 right-3 z-10">
           <div className="bg-linear-to-br from-amber-500 to-orange-600 px-3 py-2 rounded-lg shadow-lg">
             <span className="text-slate-950 font-bold text-lg">
-              #{index + 2}
+              {/* Cambiar esto cuando vuelva el Infinite Scroll a 2 */}#
+              {index + 1}
             </span>
           </div>
         </div>
