@@ -1,27 +1,44 @@
-import { Sidebar } from "./components/sidebar";
 import { Routes, Route, useLocation } from "react-router-dom";
+import { Sidebar } from "./components/sidebar";
+import { Toaster } from "sonner";
+
+// Tus páginas
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import { Toaster } from "sonner";
+
+// Páginas de tus compañeros
+import { Celebrity } from "./pages/Celebrity";
+import { TrendingCelebrity } from "./pages/TrendingCelebrity";
 
 function App() {
   const location = useLocation();
   const isLoginPage = location.pathname === "/login";
+
   return (
     <div
       className={`min-h-screen bg-gray-900 ${
         isLoginPage ? "flex items-center justify-center" : "flex"
       }`}
     >
+      {/* Sidebar solo si NO estás en login */}
       {!isLoginPage && <Sidebar />}
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
+      {/* Contenedor principal */}
+      <main className={isLoginPage ? "" : "flex-1"}>
+        <Routes>
+          {/* Tus rutas */}
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          
+          {/* Rutas de tus compañeros */}
+          <Route path="/actor/:id" element={<Celebrity />} />
+          <Route path="/trending-persons" element={<TrendingCelebrity />} />
+        </Routes>
+      </main>
 
       <Toaster />
     </div>
   );
 }
+
 export default App;
