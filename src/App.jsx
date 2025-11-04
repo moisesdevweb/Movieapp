@@ -1,5 +1,6 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import { Sidebar } from "./components/sidebar";
+import Footer from "@/components/layout/Footer";
 import { Toaster } from "sonner";
 
 // Tus páginas
@@ -34,6 +35,8 @@ function App() {
           <Route path="/actor/:id" element={<Celebrity />} />
           <Route path="/trending-persons" element={<TrendingCelebrity />} />
         </Routes>
+          {/* Footer solo si NO estás en login */}
+         <Footer />
       </main>
 
       <Toaster />
