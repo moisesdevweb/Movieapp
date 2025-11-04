@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Star, Search, Bell } from "lucide-react";
 import { slides } from "./DataSlide";
-
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
+  const navigate = useNavigate();
   const [current, setCurrent] = useState(0);
 
   const next = () => setCurrent((i) => (i + 1) % slides.length);
@@ -32,7 +33,10 @@ export default function Header() {
         <div className="flex items-center gap-3 md:gap-5">
           <Search className="w-5 h-5 cursor-pointer hover:text-purple-400 transition" />
           <Bell className="w-5 h-5 cursor-pointer hover:text-purple-400 transition" />
-          <button className="bg-purple-600 hover:bg-purple-700 px-3 py-1.5 md:px-4 md:py-2 rounded-lg font-semibold text-xs md:text-sm transition">
+          <button
+            className="bg-purple-600 hover:bg-purple-700 px-3 py-1.5 md:px-4 md:py-2 rounded-lg font-semibold text-xs md:text-sm transition cursor-pointer"
+            onClick={() => navigate("/login")}
+          >
             Iniciar Sesión
           </button>
         </div>

@@ -27,16 +27,15 @@ function App() {
       {/* Contenedor principal */}
       <main className={isLoginPage ? "" : "flex-1"}>
         <Routes>
-          {/* Tus rutas */}
+          {/* Rutas */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          
-          {/* Rutas de tus compañeros */}
+
           <Route path="/actor/:id" element={<Celebrity />} />
           <Route path="/trending-persons" element={<TrendingCelebrity />} />
         </Routes>
           {/* Footer solo si NO estás en login */}
-         <Footer />
+        {!isLoginPage && <Footer />}
       </main>
 
       <Toaster />
