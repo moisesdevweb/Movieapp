@@ -2,20 +2,21 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Film, ChevronLeft, ChevronRight, LogIn } from 'lucide-react';
 import MenuItem from './MenuItem';
-import MenuDivider from './MenuDivider';
+// Eliminamos MenuDivider y socialMenuItems de los imports porque ya no se usan
+// import MenuDivider from './MenuDivider'; 
 import UserProfile from './UserProfile';
-import { mainMenuItems, socialMenuItems, bottomMenuItems } from './sidebarConfig';
-import { useAuth } from '../../context/AuthContext'; // <--- Importamos el contexto
+import { mainMenuItems, bottomMenuItems } from './sidebarConfig'; // Quitamos socialMenuItems
+import { useAuth } from '../../context/AuthContext'; 
 
 export default function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, logout } = useAuth(); // <--- Obtenemos el usuario y logout
+  const { user, logout } = useAuth(); 
 
   const handleItemClick = (item) => {
     if (item.id === 'logout') {
-      logout(); // Cerrar sesión
+      logout();
       navigate('/login');
     } else if (item.path) {
       navigate(item.path);
@@ -37,66 +38,63 @@ export default function Sidebar() {
       `}</style>
       
       <aside
-        // CSS FIX: 'h-screen sticky top-0' hace que se quede fijo y ocupe toda la altura
         className={`bg-gray-950 border-r border-gray-800 h-screen sticky top-0 flex flex-col transition-all duration-300 z-50 ${
           isCollapsed ? 'w-20' : 'w-64'
         }`}
       >
         {/* Header */}
-        <div className="p-4 flex items-center justify-between border-b border-gray-800 shrink-0">
+        <div className="p-6 flex items-center justify-between shrink-0">
           {!isCollapsed && (
-            <div className="flex items-center gap-2">
-              <Film className="w-8 h-8 text-purple-500" />
-              <span className="text-white text-xl font-bold">Cinematrix</span>
+            <div className="flex items-center gap-2 animate-in fade-in duration-300">
+              <div className="bg-purple-600 p-1.5 rounded-lg">
+                 <Film className="w-5 h-5 text-white" />
+              </div>
+              <span className="text-white text-lg font-bold tracking-tight">Cinematrix</span>
             </div>
           )}
           
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className={`p-2 hover:bg-gray-800 rounded-lg text-gray-400 hover:text-white transition ${
+            className={`p-1.5 hover:bg-gray-800 rounded-lg text-gray-500 hover:text-white transition-colors ${
               isCollapsed ? 'mx-auto' : ''
             }`}
           >
-            {isCollapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
+            {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
           </button>
         </div>
 
-        {/* Menú Principal (Scrollable) */}
-        <nav className="flex-1 p-4 space-y-1 overflow-y-auto hide-scrollbar">
-          {mainMenuItems.map((item) => (
-            <MenuItem
-              key={item.id}
-              icon={item.icon}
-              label={item.label}
-              badge={item.badge}
-              isActive={isActiveItem(item)}
-              isCollapsed={isCollapsed}
-              onClick={() => handleItemClick(item)}
-            />
-          ))}
+        {/* Navegación */}
+        <nav className="flex-1 px-3 space-y-1 overflow-y-auto hide-scrollbar mt-4">
+          {mainMenuItems.map((item) => {
+            // LÓGICA DE PROTECCIÓN:
+            // Si el ítem requiere Auth y NO hay usuario -> No lo mostramos (return null)
+            if (item.authRequired && !user) return null;
 
-          <MenuDivider isCollapsed={isCollapsed} />
-
-          {socialMenuItems.map((item) => (
-            <MenuItem
-              key={item.id}
-              icon={item.icon}
-              label={item.label}
-              badge={item.badge}
-              isActive={isActiveItem(item)}
-              isCollapsed={isCollapsed}
-              onClick={() => handleItemClick(item)}
-            />
-          ))}
+            return (
+              <MenuItem
+                key={item.id}
+                icon={item.icon}
+                label={item.label}
+                badge={item.badge}
+                isActive={isActiveItem(item)}
+                isCollapsed={isCollapsed}
+                onClick={() => handleItemClick(item)}
+              />
+            );
+          })}
+          
+          {/* Hemos quitado la sección Social y el Divider como pediste */}
         </nav>
 
-        {/* Footer del Menú (Fijo abajo) */}
-        <div className="border-t border-gray-800 shrink-0">
-          <div className="p-4 space-y-1">
+        {/* Footer */}
+        <div className="px-3 py-4 shrink-0">
+          <div className="space-y-1 mb-4">
             {bottomMenuItems.map((item) => {
-              // Si es botón salir y NO hay usuario, no lo mostramos
-              if (item.id === 'logout' && !user) return null;
+              if (item.id === 'logout' && user) return null; // El logout está dentro del perfil
               
+              // Ocultamos configuración si no está logueado (opcional, si quieres)
+              if (item.id === 'configuracion' && !user) return null;
+
               return (
                 <MenuItem
                   key={item.id}
@@ -110,23 +108,26 @@ export default function Sidebar() {
             })}
           </div>
 
-          <div className="p-4 border-t border-gray-800">
+          <div className="pt-4 border-t border-gray-800">
             {user ? (
-              // CASO 1: Usuario Logueado -> Mostramos su perfil real
               <UserProfile
                 isCollapsed={isCollapsed}
-                userName={user.name}
-                userEmail={user.email}
+                user={user} 
+                onLogout={() => {
+                   logout();
+                   navigate('/login');
+                }}
               />
             ) : (
-              // CASO 2: No Logueado -> Botón de Iniciar Sesión
-              <MenuItem
-                icon={LogIn}
-                label="Iniciar Sesión"
-                isActive={location.pathname === '/login'}
-                isCollapsed={isCollapsed}
+              <button
                 onClick={() => navigate('/login')}
-              />
+                className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl bg-gray-900 hover:bg-purple-600 hover:text-white text-gray-400 transition-all duration-300 group border border-gray-800 hover:border-purple-500 ${
+                    isCollapsed ? 'justify-center' : ''
+                }`}
+              >
+                <LogIn className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                {!isCollapsed && <span className="font-medium text-sm">Iniciar Sesión</span>}
+              </button>
             )}
           </div>
         </div>
