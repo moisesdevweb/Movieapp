@@ -6,7 +6,7 @@ import { Toaster } from "sonner";
 // Tus páginas
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-
+import MovieDetails from "./pages/MovieDetails";
 // Páginas de tus compañeros
 import { Celebrity } from "./pages/Celebrity";
 import { TrendingCelebrity } from "./pages/TrendingCelebrity";
@@ -25,11 +25,12 @@ function App() {
       {!isLoginPage && <Sidebar />}
 
       {/* Contenedor principal */}
-      <main className={isLoginPage ? "" : "flex-1"}>
+      <main className={isLoginPage ? "" : "flex-1 relative"}>
         <Routes>
           {/* Rutas */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/movie/:id" element={<MovieDetails />} />
 
           <Route path="/actor/:id" element={<Celebrity />} />
           <Route path="/trending-persons" element={<TrendingCelebrity />} />

@@ -38,3 +38,18 @@ export const getPersonCreditsById = async (id) => {
   const data = await response.json();
   return data;
 };
+
+// --- NUEVA FUNCIÓN MAESTRA ---
+export const getMovieDetails = async (id) => {
+  // append_to_response=credits,videos,similar,images
+  // Esto trae:
+  // 1. Datos base (Título, sinopsis, año)
+  // 2. credits: Actores y Director
+  // 3. videos: Trailers y Teasers de YouTube
+  // 4. similar: Películas recomendadas parecidas
+  const response = await fetch(
+    `${BASE_URL}/movie/${id}?api_key=${API_KEY}&language=es-ES&append_to_response=credits,videos,similar`
+  );
+  const data = await response.json();
+  return data;
+};
