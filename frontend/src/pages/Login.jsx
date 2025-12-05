@@ -4,14 +4,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+// Importamos useLocation para saber de dónde venimos
+import { useNavigate, useLocation } from "react-router-dom"; 
 import { loginUser, registerUser } from "../services/authService";
-import { useAuth } from "../context/AuthContext"; // <--- IMPORTAR CONTEXTO
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login } = useAuth(); // <--- USAR FUNCIÓN LOGIN DEL CONTEXTO
+  const location = useLocation(); // Hook para leer el estado de navegación
+  const { login } = useAuth();
   
+  // MAGIA: Recuperamos la ruta de donde venía el usuario.
+  // Si no venía de ninguna parte (directo al login), usamos "/" (Inicio) por defecto.
+  const from = location.state?.from?.pathname || "/";
+
   const [isLogin, setIsLogin] = useState(true);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -30,19 +36,24 @@ const Login = () => {
 
     try {
       if (isLogin) {
-        // --- LOGIN ---
+        // --- PROCESO DE LOGIN ---
         const response = await loginUser({ email, password });
         
-        // ¡MAGIA AQUÍ! El contexto actualiza el Sidebar automáticamente
+        // Guardamos sesión en el contexto
         login(response.user, response.token);
         
         toast.success(`¡Bienvenido de vuelta, ${response.user.name}!`);
-        navigate("/");
+        
+        // REDIRECCIÓN INTELIGENTE:
+        // En lugar de ir siempre a "/", vamos a la variable 'from'.
+        // replace: true borra el login del historial para que al dar "Atrás" no vuelvas al login.
+        navigate(from, { replace: true });
+
       } else {
-        // --- REGISTRO ---
+        // --- PROCESO DE REGISTRO ---
         await registerUser({ name, email, password });
         toast.success("¡Cuenta creada! Ahora inicia sesión.");
-        setIsLogin(true);
+        setIsLogin(true); // Cambiamos a la vista de login
         setPassword("");
       }
     } catch (error) {
@@ -54,6 +65,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4">
+      
       <button
         onClick={() => navigate("/")}
         className="absolute top-6 left-6 flex items-center gap-2 hover:text-purple-500 transition-all duration-300 group cursor-pointer text-gray-600"
@@ -68,7 +80,7 @@ const Login = () => {
 
       <div className="w-[550px] max-w-md">
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-linear-to-br from-purple-500 to-purple-600 mb-4 shadow-[0_0_40px_rgba(168,85,247,0.5)]">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 mb-4 shadow-[0_0_40px_rgba(168,85,247,0.5)]">
             <Film className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">
@@ -83,6 +95,8 @@ const Login = () => {
 
         <div className="bg-gray-800 rounded-2xl p-8 shadow-[0_0_80px_rgba(0,0,0,0.5)] border border-gray-700 overflow-hidden">
           <form onSubmit={handleSubmit} className="space-y-6">
+            
+            {/* Campo Nombre (Solo Registro) */}
             {!isLogin && (
               <div className="space-y-2 animate-in fade-in slide-in-from-top-4 duration-300">
                 <Label htmlFor="name" className="text-white">
@@ -102,6 +116,7 @@ const Login = () => {
               </div>
             )}
 
+            {/* Campo Email */}
             <div className="space-y-2">
               <Label htmlFor="email" className="text-white">
                 Email
@@ -116,6 +131,7 @@ const Login = () => {
               />
             </div>
 
+            {/* Campo Password */}
             <div className="space-y-2">
               <Label htmlFor="password" className="text-white">
                 Contraseña

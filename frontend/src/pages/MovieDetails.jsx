@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getMovieDetails } from "../services/tmdbApi";
+import ReviewSection from "../components/reviews/ReviewSection";
 import { Play, Star, Calendar, Clock, Users, Heart, X } from "lucide-react"; // Importamos X para cerrar
 
 export default function MovieDetails() {
@@ -164,12 +165,16 @@ export default function MovieDetails() {
             </div>
           </section>
 
-          <section className="bg-gray-800/30 rounded-2xl p-6 border border-gray-700/50">
-            <h3 className="text-xl font-bold mb-4">Comentarios de la Comunidad</h3>
-            <div className="text-center py-8 text-gray-500">
-              <p>Conectaremos esto al backend pronto...</p>
-            </div>
+          {/* --- AQUÍ INSERTAMOS EL NUEVO COMPONENTE DE COMENTARIOS --- */}
+          <section>
+             <ReviewSection 
+                movieId={movie.id} 
+                movieTitle={movie.title}
+                movieImage={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+             />
           </section>
+              
+
         </div>
 
         <div className="space-y-8">
