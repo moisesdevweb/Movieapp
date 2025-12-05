@@ -1,4 +1,4 @@
-import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
 import { User } from './User';
 import { Movie } from './Movie';
 
@@ -10,15 +10,15 @@ export class Review extends Model {
         type: DataType.TEXT,
         allowNull: false
     })
-    declare content: string; // El comentario escrito
+    declare content: string;
 
     @Column({
         type: DataType.INTEGER,
-        validate: { min: 1, max: 5 } // Estrellas del 1 al 5
+        validate: { min: 1, max: 5 }
     })
     declare rating: number;
 
-    // Llave foránea: ¿Quién escribió esto?
+    // Relación con Usuario
     @ForeignKey(() => User)
     @Column({
         type: DataType.INTEGER,
@@ -29,7 +29,7 @@ export class Review extends Model {
     @BelongsTo(() => User)
     declare user: User;
 
-    // Llave foránea: ¿De qué película es?
+    // Relación con Película
     @ForeignKey(() => Movie)
     @Column({
         type: DataType.INTEGER,
@@ -39,4 +39,21 @@ export class Review extends Model {
 
     @BelongsTo(() => Movie)
     declare movie: Movie;
+
+    // --- NUEVO: SOPORTE PARA RESPUESTAS (HILOS) ---
+    
+    @ForeignKey(() => Review) // Se apunta a sí misma
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: true // Puede ser null (si es un comentario principal)
+    })
+    declare parentId: number;
+
+    // Una reseña pertenece a una reseña padre
+    @BelongsTo(() => Review, { as: 'parent' })
+    declare parent: Review;
+
+    // Una reseña puede tener muchas respuestas (hijos)
+    @HasMany(() => Review, { as: 'replies', foreignKey: 'parentId' })
+    declare replies: Review[];
 }
