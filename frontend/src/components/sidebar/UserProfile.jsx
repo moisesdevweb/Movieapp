@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { LogOut, User, Settings, Sparkles } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function UserProfile({ isCollapsed, user, onLogout }) {
   const [showMenu, setShowMenu] = useState(false);
+  const navigate = useNavigate();
 
   // Validación de seguridad: Si no hay usuario, no mostramos nada para evitar errores
   if (!user) return null;
@@ -19,7 +21,7 @@ export default function UserProfile({ isCollapsed, user, onLogout }) {
         }`}
       >
         {/* Avatar con gradiente */}
-        <div className="w-9 h-9 min-w-[36px] rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold shadow-lg shadow-purple-500/20 group-hover:shadow-purple-500/40 transition-all">
+        <div className="w-9 h-9 min-w-[36px] rounded-full bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold shadow-lg shadow-purple-500/20 group-hover:shadow-purple-500/40 transition-all">
           {initial}
         </div>
         
@@ -36,12 +38,24 @@ export default function UserProfile({ isCollapsed, user, onLogout }) {
         <div className="absolute bottom-full left-0 right-0 mb-3 mx-2 bg-gray-900 rounded-xl shadow-[0_0_30px_rgba(0,0,0,0.5)] border border-gray-800 overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-200 z-50">
           
           <div className="p-2 space-y-1">
-            <button className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition-colors text-left">
+            <button 
+              onClick={() => {
+                navigate('/profile');
+                setShowMenu(false);
+              }}
+              className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition-colors text-left"
+            >
               <User className="w-4 h-4 text-purple-400" />
               <span>Mi Perfil</span>
             </button>
             
-            <button className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition-colors text-left">
+            <button 
+              onClick={() => {
+                navigate('/settings');
+                setShowMenu(false);
+              }}
+              className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition-colors text-left"
+            >
               <Settings className="w-4 h-4 text-blue-400" />
               <span>Configuración</span>
             </button>

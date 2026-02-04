@@ -2,9 +2,7 @@ import {
   Home, 
   TrendingUp, 
   PartyPopper, 
-  Settings, 
-  LogOut,
-  ListVideo // Icono nuevo para lista de seguimiento
+  ListVideo 
 } from 'lucide-react';
 
 // Menú Principal
@@ -28,27 +26,12 @@ export const mainMenuItems = [
     path: '/trending-persons' 
   },
   { 
-    // NUEVO ÍTEM: Solo para usuarios logueados
     id: 'watchlist', 
     icon: ListVideo, 
     label: 'Mi Lista', 
-    path: '/watchlist',
-    authRequired: true // <--- Esta es la clave mágica
+    path: '/my-list',
+    authRequired: true 
   },
 ];
 
-// Menú Inferior
-export const bottomMenuItems = [
-  { 
-    id: 'configuracion', 
-    icon: Settings, 
-    label: 'Configuración',
-    path: '/configuracion' 
-  },
-  { 
-    id: 'logout', 
-    icon: LogOut, 
-    label: 'Cerrar sesión',
-    path: null
-  },
-];
+export const bottomMenuItems = [];

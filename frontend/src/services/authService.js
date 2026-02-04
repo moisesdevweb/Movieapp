@@ -44,3 +44,57 @@ export const registerUser = async (userInfo) => {
 
   return data;
 };
+
+export const getMe = async (token) => {
+  const response = await fetch(`${API_URL}/me`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || "Error al obtener perfil");
+  }
+
+  return data;
+};
+
+/**
+ * Obtener estadísticas reales del usuario
+ */
+export const getUserStats = async (token) => {
+  const response = await fetch(`${API_URL}/stats`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || "Error al obtener estadísticas");
+  }
+
+  return data;
+};
+
+/**
+ * Actualizar datos del usuario (Nombre, Password)
+ */
+export const updateUserData = async (userData, token) => {
+  const response = await fetch(`${API_URL}/update`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(userData),
+  });
+
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || "Error al actualizar perfil");
+  }
+
+  return data;
+};

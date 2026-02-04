@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { getMe } from '../services/authService';
 
 const AuthContext = createContext();
 
@@ -8,13 +9,27 @@ export const AuthProvider = ({ children }) => {
 
   // Al cargar la app, revisamos si hay una sesión guardada
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    const storedToken = localStorage.getItem('token');
+    const initAuth = async () => {
+      const storedUser = localStorage.getItem('user');
+      const storedToken = localStorage.getItem('token');
 
-    if (storedUser && storedToken) {
-      setUser(JSON.parse(storedUser));
-    }
-    setLoading(false);
+      if (storedToken) {
+        try {
+          // Intentamos refrescar los datos desde el servidor
+          const response = await getMe(storedToken);
+          if (response.user) {
+            setUser(response.user);
+            localStorage.setItem('user', JSON.stringify(response.user));
+          }
+        } catch (error) {
+          console.error("Error al refrescar sesión:", error);
+          if (storedUser) setUser(JSON.parse(storedUser));
+        }
+      }
+      setLoading(false);
+    };
+
+    initAuth();
   }, []);
 
   // Función para Login
