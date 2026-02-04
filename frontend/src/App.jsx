@@ -10,6 +10,9 @@ import MovieDetails from "./pages/MovieDetails";
 // Páginas de tus compañeros
 import { Celebrity } from "./pages/Celebrity";
 import { TrendingCelebrity } from "./pages/TrendingCelebrity";
+import MyList from "./pages/MyList";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 
 function App() {
   const location = useLocation();
@@ -31,6 +34,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/movie/:id" element={<MovieDetails />} />
+          <Route path="/my-list" element={<MyList />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
 
           <Route path="/actor/:id" element={<Celebrity />} />
           <Route path="/trending-persons" element={<TrendingCelebrity />} />

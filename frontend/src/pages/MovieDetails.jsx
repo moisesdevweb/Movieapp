@@ -2,13 +2,21 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getMovieDetails } from "../services/tmdbApi";
 import ReviewSection from "../components/reviews/ReviewSection";
-import { Play, Star, Calendar, Clock, Users, Heart, X } from "lucide-react"; // Importamos X para cerrar
+import { Play, Star, Calendar, Clock, Users, Heart, X, Check } from "lucide-react"; // Importamos X para cerrar y Check
+import { useAuth } from "../context/AuthContext";
+import { addMovieToList, removeMovieFromList, getUserMovieList } from "../services/movieListService";
+import { toast } from "sonner"; // Usamos sonner para consistencia
 
 export default function MovieDetails() {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showTrailer, setShowTrailer] = useState(false); // Estado para controlar el modal
+  const [isInList, setIsInList] = useState(false);
+  const [internalMovieId, setInternalMovieId] = useState(null);
+  const [isUpdatingList, setIsUpdatingList] = useState(false);
+  const { user } = useAuth();
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -16,6 +24,16 @@ export default function MovieDetails() {
         setLoading(true);
         const data = await getMovieDetails(id);
         setMovie(data);
+
+        // Verificar si está en la lista si el usuario está logueado
+        if (user && token) {
+          const listResponse = await getUserMovieList(token);
+          const movieInList = listResponse.data.find(m => m.apiId === parseInt(id));
+          if (movieInList) {
+            setIsInList(true);
+            setInternalMovieId(movieInList.id);
+          }
+        }
       } catch (error) {
         console.error("Error cargando película:", error);
       } finally {
@@ -45,6 +63,42 @@ export default function MovieDetails() {
     (vid) => vid.site === "YouTube" && (vid.type === "Trailer" || vid.type === "Teaser")
   );
 
+  const handleToggleList = async () => {
+    if (!user) {
+      toast.error("Debes iniciar sesión para guardar películas");
+      return;
+    }
+
+    try {
+      setIsUpdatingList(true);
+      if (isInList) {
+        await removeMovieFromList(internalMovieId, token);
+        setIsInList(false);
+        setInternalMovieId(null);
+        toast.success("Eliminada de tu lista");
+      } else {
+        const movieData = {
+          apiId: movie.id,
+          title: movie.title,
+          image: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+          description: movie.overview,
+          genre: movie.genres.map(g => g.name).join(", ")
+        };
+        const response = await addMovieToList(movieData, token);
+        const listResponse = await getUserMovieList(token);
+        const addedMovie = listResponse.data.find(m => m.apiId === movie.id);
+        
+        setIsInList(true);
+        setInternalMovieId(addedMovie.id);
+        toast.success("¡Añadida a tu lista!");
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setIsUpdatingList(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-white pb-20 relative">
       
@@ -56,8 +110,8 @@ export default function MovieDetails() {
             backgroundImage: `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})` 
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/60 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-900/40 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-gray-900 via-gray-900/60 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-r from-gray-900 via-gray-900/40 to-transparent" />
         </div>
 
         <div className="absolute bottom-0 left-0 w-full p-6 md:p-12 lg:p-16 flex flex-col md:flex-row gap-8 md:items-end">
@@ -115,9 +169,17 @@ export default function MovieDetails() {
                 </button>
               )}
 
-              <button className="bg-gray-800/80 backdrop-blur-md hover:bg-gray-700 text-white px-6 py-3 rounded-xl font-medium border border-gray-600 flex items-center gap-3 transition-colors">
-                <Heart size={20} />
-                Añadir a lista
+              <button 
+                onClick={handleToggleList}
+                disabled={isUpdatingList}
+                className={`px-6 py-3 rounded-xl font-medium border flex items-center gap-3 transition-all duration-300 ${
+                  isInList 
+                    ? "bg-purple-600/20 border-purple-500 text-purple-400 hover:bg-purple-600/30" 
+                    : "bg-gray-800/80 backdrop-blur-md hover:bg-gray-700 text-white border-gray-600"
+                } ${isUpdatingList ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                {isInList ? <Check size={20} /> : <Heart size={20} className={!user ? 'text-gray-500' : ''} />}
+                {isInList ? "En tu lista" : "Añadir a lista"}
               </button>
             </div>
           </div>
@@ -209,7 +271,7 @@ export default function MovieDetails() {
       {/* --- MODAL DE TRAILER (NUEVO) --- */}
       {showTrailer && trailer && (
         <div 
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 animate-in fade-in duration-300"
+          className="fixed inset-0 z-60 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 animate-in fade-in duration-300"
           onClick={() => setShowTrailer(false)} // Cerrar al dar click fuera
         >
           <div 
