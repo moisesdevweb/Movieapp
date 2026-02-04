@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:4000/api/reviews"; 
+const API_URL = `${import.meta.env.VITE_API_BASE_URL}/reviews`; 
 
 export const getMovieReviews = async (apiId) => {
   const response = await fetch(`${API_URL}/${apiId}`);
