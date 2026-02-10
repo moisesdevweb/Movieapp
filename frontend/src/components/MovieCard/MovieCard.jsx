@@ -1,10 +1,10 @@
-import { useState } from "react";
+
 import { Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom"; // 1. Importar useNavigate
 
 export default function MovieCard({ movie }) {
   const navigate = useNavigate(); // 2. Inicializar el hook
-  const [favorite, setFavorite] = useState(false);
+
 
   const imageUrl = movie.poster_path
     ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
@@ -30,19 +30,7 @@ export default function MovieCard({ movie }) {
         />
       </div>
 
-      {/* Botón de favorito */}
-      <button
-        onClick={(e) => {
-          e.stopPropagation(); // Evita que al dar like se abra la película
-          setFavorite(!favorite);
-        }}
-        className="absolute top-3 right-3 bg-white/70 p-2 rounded-full backdrop-blur-sm hover:bg-white transition z-10"
-      >
-        <Heart
-          size={18}
-          className={`${favorite ? "fill-red-500 text-red-500" : "text-gray-600"}`}
-        />
-      </button>
+      
 
       {/* Info */}
       <div className="absolute bottom-0 w-full p-4 bg-gradient-to-t from-black/80 via-black/30 to-transparent">
