@@ -59,11 +59,6 @@ export default function UserProfile({ isCollapsed, user, onLogout }) {
               <Settings className="w-4 h-4 text-blue-400" />
               <span>Configuración</span>
             </button>
-
-            <button className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition-colors text-left">
-               <Sparkles className="w-4 h-4 text-yellow-400" />
-               <span>Plan Premium</span>
-            </button>
           </div>
 
           <div className="h-px bg-gray-800 mx-2" />

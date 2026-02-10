@@ -14,12 +14,6 @@ export const mainMenuItems = [
     path: '/' 
   },
   { 
-    id: 'tendencias', 
-    icon: TrendingUp, 
-    label: 'Tendencias',
-    path: '/tendencias' 
-  },
-  { 
     id: 'actores', 
     icon: PartyPopper , 
     label: 'Actores', 
